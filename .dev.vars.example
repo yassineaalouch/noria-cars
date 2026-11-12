@@ -1,0 +1,3 @@
+# Copy to .dev.vars for local Wrangler. Do not commit the real key.
+# The from-address must stay on a domain verified in Resend. Today that is moroccomiles.com.
+RESEND_API_KEY=
