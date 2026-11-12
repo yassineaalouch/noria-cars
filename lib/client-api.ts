@@ -1,4 +1,11 @@
-export const RESERVATION_URL = process.env.NEXT_PUBLIC_RESERVATION_URL ?? "http://127.0.0.1:8788";
+const reservationEndpoint = (value: string) => {
+  const trimmed = value.trim();
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  return `https://${trimmed.replace(/^\/+/, "")}`;
+};
+
+export const RESERVATION_URL = reservationEndpoint(process.env.NEXT_PUBLIC_RESERVATION_URL ?? "http://127.0.0.1:8788");
 
 export type ReservationPayload = {
   kind: "reservation" | "contact" | "newsletter";
