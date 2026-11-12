@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "noria-cars-reservation",
+  "name": "noria-cars",
   "main": "workers/reservation-handler/index.ts",
   "compatibility_date": "2026-11-03",
   "observability": {
@@ -14,7 +14,7 @@
     "port": 8788
   },
   "vars": {
-    "ALLOWED_ORIGINS": "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002,https://noria-cars.com,https://www.noria-cars.com",
+    "ALLOWED_ORIGINS": "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002,https://noria-cars.pages.dev,https://noria-cars.com,https://www.noria-cars.com",
     "BOOKING_NOTIFY_EMAIL": "reservations@moroccomiles.com",
     "RESEND_FROM": "Noria-Cars <reservations@moroccomiles.com>"
   },

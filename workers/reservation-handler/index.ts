@@ -49,11 +49,24 @@ const clean = (value: unknown, max: number) =>
 const escapeHtml = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
+const listedOrigins = (env: Env) => env.ALLOWED_ORIGINS.split(",").map((item) => item.trim()).filter(Boolean);
+
+const originAllowed = (origin: string, env: Env) => {
+  if (!origin) return false;
+  if (listedOrigins(env).includes(origin)) return true;
+  try {
+    const url = new URL(origin);
+    const host = url.hostname;
+    return url.protocol === "https:" && (host === "noria-cars.pages.dev" || host.endsWith(".noria-cars.pages.dev"));
+  } catch {
+    return false;
+  }
+};
+
 const corsHeaders = (request: Request, env: Env) => {
   const origin = request.headers.get("Origin") ?? "";
-  const allowed = env.ALLOWED_ORIGINS.split(",").map((item) => item.trim()).filter(Boolean);
   const headers = new Headers();
-  headers.set("access-control-allow-origin", allowed.includes(origin) ? origin : "null");
+  headers.set("access-control-allow-origin", originAllowed(origin, env) ? origin : "null");
   headers.set("access-control-allow-methods", "POST, OPTIONS");
   headers.set("access-control-allow-headers", "content-type");
   headers.set("access-control-max-age", "86400");
@@ -199,8 +212,7 @@ export default {
     if (request.method !== "POST") return json({ ok: false, error: "Method not allowed." }, 405, cors);
 
     const origin = request.headers.get("Origin");
-    const allowed = env.ALLOWED_ORIGINS.split(",").map((item) => item.trim());
-    if (origin && !allowed.includes(origin)) return json({ ok: false, error: "Origin is not allowed." }, 403, cors);
+    if (origin && !originAllowed(origin, env)) return json({ ok: false, error: "Origin is not allowed." }, 403, cors);
 
     const raw = await request.text();
     if (raw.length > MAX_BODY_BYTES) return json({ ok: false, error: "Payload is too large." }, 413, cors);
