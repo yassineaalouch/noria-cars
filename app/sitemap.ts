@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { cars, pickupPoints } from "@/lib/fleet";
 import { absoluteUrl } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = "2026-11-12";
   const staticPaths = ["/", "/cars", "/locations", "/about", "/contact", "/faq", "/terms"];
